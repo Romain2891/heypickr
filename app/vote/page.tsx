@@ -54,7 +54,7 @@ export default function VotePage() {
   const pickr = pickrs[current]
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col">
+    <main className="h-screen bg-black text-white flex flex-col overflow-hidden">
       <div className="p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">pickr</h1>
         <div className="bg-white/10 rounded-full px-3 py-1 text-sm">
@@ -73,7 +73,7 @@ export default function VotePage() {
         ))}
       </div>
 
-      <div className="flex-1 p-4 flex flex-col gap-4">
+      <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-auto">
         {pickr ? (
           <>
             <p className="text-center text-gray-400 text-sm">{pickr.question}</p>
