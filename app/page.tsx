@@ -113,4 +113,58 @@ export default function VotePage() {
 
               {showHint && (
                 <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 20, pointerEvents: 'none' }}>
-                  <div style={{ background: 'rgba(8,8,8,0.85)', border: '0.5px solid rgba(201,168,76,0.5)', borderRadius: 24, padding: '8px 16px', display: 'flex', alig
+                  <div style={{ background: 'rgba(8,8,8,0.85)', border: '0.5px solid rgba(201,168,76,0.5)', borderRadius: 24, padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap' as const }}>
+                    <span style={{ color: '#C9A84C', fontSize: 14 }}>←</span>
+                    <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: 2 }}>
+                      <span style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 16, letterSpacing: 4, color: '#fff' }}>PICK ONE</span>
+                      <span style={{ fontSize: 8, letterSpacing: 2, color: '#aaa', textTransform: 'uppercase' as const }}>slide to explore · tap to vote</span>
+                    </div>
+                    <span style={{ color: '#C9A84C', fontSize: 14 }}>→</span>
+                  </div>
+                </div>
+              )}
+
+              {voted && (
+                <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,8,8,0.5)', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', zIndex: 20 }}>
+                  <div style={{ width: 56, height: 56, background: '#C9A84C', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7" stroke="#080808" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </div>
+                  <div style={{ color: '#fff', fontWeight: 600, fontSize: 14, letterSpacing: 3, textTransform: 'uppercase' as const }}>Voted {votedChoice}</div>
+                  <div style={{ color: '#C9A84C', fontSize: 10, letterSpacing: 1, marginTop: 4 }}>+0.1 credit</div>
+                </div>
+              )}
+            </div>
+
+            <div style={{ padding: '8px 20px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+              <span style={{ fontSize: 10, color: '#fff', letterSpacing: 1, minWidth: 28 }}>{voteCount % 10}/10</span>
+              <div style={{ flex: 1, height: 3, background: '#1a1a1a', borderRadius: 2, overflow: 'hidden' }}>
+                <div style={{ height: '100%', background: '#C9A84C', borderRadius: 2, width: `${progress}%`, transition: 'width 0.3s ease' }} />
+              </div>
+              <span style={{ fontSize: 10, color: '#C9A84C', letterSpacing: 1, fontWeight: 600 }}>+1 credit</span>
+            </div>
+          </>
+        ) : (
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', gap: 16, padding: 24 }}>
+            <div style={{ fontSize: 11, color: '#444', letterSpacing: 3, textTransform: 'uppercase' as const }}>No pickr available</div>
+            <a href="/submit" style={{ background: '#C9A84C', color: '#080808', padding: '10px 24px', borderRadius: 20, fontSize: 11, letterSpacing: 2, textTransform: 'uppercase' as const, fontWeight: 600, textDecoration: 'none' }}>Submit the first one →</a>
+          </div>
+        )}
+      </div>
+
+      <div style={{ borderTop: '0.5px solid #1a1a1a', display: 'flex', justifyContent: 'space-around', padding: '7px 0 4px', flexShrink: 0, background: '#080808' }}>
+        {[
+          { href: '/vote', label: 'Vote', active: true, icon: 'M4 6h16M4 12h16M4 18h7' },
+          { href: '/submit', label: 'Submit', active: false, icon: 'M12 5v14M5 12h14' },
+          { href: '/results', label: 'Results', active: false, icon: 'M4 20V10m5 10V4m5 16v-7m5 7v-4' },
+          { href: '/profile', label: 'Profile', active: false, icon: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z' },
+        ].map(item => (
+          <a key={item.href} href={item.href} style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: 3, color: item.active ? '#C9A84C' : '#fff', fontSize: 9, letterSpacing: 2, textTransform: 'uppercase' as const, padding: '3px 12px', textDecoration: 'none' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={item.icon} /></svg>
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </div>
+
+    </main>
+  )
+}
