@@ -13,7 +13,7 @@ export default function VotePage() {
   const [voted, setVoted] = useState(false)
   const [votedChoice, setVotedChoice] = useState('')
   const [voteCount, setVoteCount] = useState(0)
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { fetchPickrs() }, [category])
 
