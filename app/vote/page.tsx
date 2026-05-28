@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 const CATEGORIES = ['Tout', 'Mode', 'Coiffure', 'Make-up', 'Voyage', 'Profil']
 
 export default function VotePage() {
-  const [pickrs, setPickrs] = useState([])
+  const [pickrs, setPickrs] = useState<any[]>([])
   const [current, setCurrent] = useState(0)
   const [splitPos, setSplitPos] = useState(50)
   const [isDragging, setIsDragging] = useState(false)
