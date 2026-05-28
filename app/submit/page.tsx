@@ -20,7 +20,7 @@ export default function SubmitPage() {
   }
 
   async function uploadPhoto(file: File, name: string) {
-    const { data, error } = await supabase.storage.from('pickrs').upload(name, file, { upsert: true })
+    const { data, error } = await supabase.storage.from('pickr').upload(name, file, { upsert: true })
     if (error) throw error
     const { data: urlData } = supabase.storage.from('pickr').getPublicUrl(name)
     return urlData.publicUrl
