@@ -47,7 +47,7 @@ async function uploadPhoto(file: File, name: string) {
     }
     setLoading(false)
   }
-  }
+  
 
   if (success) return (
     <main style={{ minHeight: '100svh', backgroundColor: '#080808', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: 'system-ui', padding: 24 }}>
