@@ -47,6 +47,10 @@ export default function SubmitPage() {
     setLoading(false)
   }
 
+  function goToVote() {
+    window.location.href = '/vote'
+  }
+
   if (success) return (
     <main style={{ minHeight: '100svh', backgroundColor: '#080808', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, fontFamily: 'system-ui', padding: 24 }}>
       <div style={{ width: 64, height: 64, background: '#C9A84C', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -54,7 +58,7 @@ export default function SubmitPage() {
       </div>
       <div style={{ fontFamily: '"Bebas Neue", sans-serif', fontSize: 28, letterSpacing: 4, color: '#fff' }}>Submitted!</div>
       <div style={{ fontSize: 13, color: '#aaa', letterSpacing: 1, textAlign: 'center' }}>The community will vote on your pickr.</div>
-      <a href="/vote" onClick={() => window.location.href = '/vote'} style={{ background: '#C9A84C', color: '#080808', padding: '10px 28px', borderRadius: 20, fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', fontWeight: 600, textDecoration: 'none' }}>See votes →</a>
+      <button onClick={goToVote} style={{ background: '#C9A84C', color: '#080808', padding: '10px 28px', borderRadius: 20, fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', fontWeight: 600, border: 'none', cursor: 'pointer' }}>See votes →</button>
     </main>
   )
 
@@ -65,7 +69,7 @@ export default function SubmitPage() {
         <div style={{ fontFamily: '"Bebas Neue", "Arial Black", sans-serif', fontSize: 24, letterSpacing: 4, color: '#fff' }}>
           P/CKR<span style={{ color: '#C9A84C' }}>·</span>
         </div>
-        <a href="/vote" style={{ color: '#aaa', fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', textDecoration: 'none' }}>← back</a>
+        <button onClick={goToVote} style={{ color: '#aaa', fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', background: 'none', border: 'none', cursor: 'pointer' }}>← back</button>
       </div>
 
       <div style={{ padding: '0 20px 16px', borderBottom: '0.5px solid #1a1a1a', flexShrink: 0 }}>
@@ -114,15 +118,15 @@ export default function SubmitPage() {
 
       <div style={{ borderTop: '0.5px solid #1a1a1a', display: 'flex', justifyContent: 'space-around', padding: '7px 0 4px', flexShrink: 0, background: '#080808' }}>
         {[
-          { href: '/vote', label: 'Vote', active: false, icon: 'M4 6h16M4 12h16M4 18h7' },
-          { href: '/submit', label: 'Submit', active: true, icon: 'M12 5v14M5 12h14' },
-          { href: '/results', label: 'Results', active: false, icon: 'M4 20V10m5 10V4m5 16v-7m5 7v-4' },
-          { href: '/profile', label: 'Profile', active: false, icon: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z' },
+          { label: 'Vote', active: false, icon: 'M4 6h16M4 12h16M4 18h7', onClick: goToVote },
+          { label: 'Submit', active: true, icon: 'M12 5v14M5 12h14', onClick: () => {} },
+          { label: 'Results', active: false, icon: 'M4 20V10m5 10V4m5 16v-7m5 7v-4', onClick: () => window.location.href = '/results' },
+          { label: 'Profile', active: false, icon: 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z', onClick: () => window.location.href = '/profile' },
         ].map(item => (
-          <a key={item.href} href={item.href} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, color: item.active ? '#C9A84C' : '#fff', fontSize: 9, letterSpacing: 2, textTransform: 'uppercase', padding: '3px 12px', textDecoration: 'none' }}>
+          <button key={item.label} onClick={item.onClick} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, color: item.active ? '#C9A84C' : '#fff', fontSize: 9, letterSpacing: 2, textTransform: 'uppercase', padding: '3px 12px', background: 'none', border: 'none', cursor: 'pointer' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={item.icon} /></svg>
             <span>{item.label}</span>
-          </a>
+          </button>
         ))}
       </div>
 
