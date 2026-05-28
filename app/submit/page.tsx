@@ -19,8 +19,8 @@ export default function SubmitPage() {
     else { setPhotoB(file); setPreviewB(url) }
   }
 
-  async function uploadPhoto(file: File, name: string) {
-    const { data, error } = await supabase.storage.from('pickr').upload(name, file, { upsert: true })
+async function uploadPhoto(file: File, name: string) {
+    const { error } = await supabase.storage.from('pickr').upload(name, file, { upsert: true })
     if (error) throw error
     const { data: urlData } = supabase.storage.from('pickr').getPublicUrl(name)
     return urlData.publicUrl
@@ -33,17 +33,20 @@ export default function SubmitPage() {
       const timestamp = Date.now()
       const urlA = await uploadPhoto(photoA, `${timestamp}_a.jpg`)
       const urlB = await uploadPhoto(photoB, `${timestamp}_b.jpg`)
-      await supabase.from('pickr').insert({
+      const { error } = await supabase.from('pickrs').insert({
         category: category.toLowerCase(),
         image_a: urlA,
         image_b: urlB,
         user_id: '00000000-0000-0000-0000-000000000000'
       })
+      if (error) throw error
       setSuccess(true)
     } catch (e) {
-      console.error(e)
+      console.error('Error:', e)
+      alert('Erreur: ' + JSON.stringify(e))
     }
     setLoading(false)
+  }
   }
 
   if (success) return (
