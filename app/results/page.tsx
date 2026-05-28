@@ -22,7 +22,7 @@ export default function ResultsPage() {
 
       <div style={{ padding: '10px 20px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
         <div style={{ fontFamily: 'Bebas Neue, Arial Black, sans-serif', fontSize: 24, letterSpacing: 4, color: '#fff' }}>
-          P/CKR<span style={{ color: '#C9A84C' }}>.</span>
+          P/CKR<span style={{ color: '#C9A84C' }}>·</span>
         </div>
       </div>
 
@@ -30,7 +30,7 @@ export default function ResultsPage() {
         <div style={{ fontFamily: 'Bebas Neue, Arial Black, sans-serif', fontSize: 15, letterSpacing: 5, color: '#C9A84C' }}>RESULTS</div>
       </div>
 
-      <div style={{ flex: 1, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 12, overflowY: 'auto' }}>
+      <div style={{ flex: 1, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 16, overflowY: 'auto' }}>
         {pickrs.length === 0 ? (
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
             <div style={{ fontSize: 11, color: '#444', letterSpacing: 3, textTransform: 'uppercase' }}>No results yet</div>
@@ -45,32 +45,38 @@ export default function ResultsPage() {
 
             return (
               <div key={pickr.id} style={{ background: '#111', border: '0.5px solid #1a1a1a', borderRadius: 12, overflow: 'hidden' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', height: 120 }}>
-                  <div style={{ position: 'relative', background: '#1a1a1a' }}>
-                    {pickr.image_a && <img src={pickr.image_a} alt="A" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
-                    <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(8,8,8,0.75)', borderRadius: 4, padding: '2px 8px', fontSize: 10, letterSpacing: 2, color: winner === 'A' ? '#C9A84C' : '#fff' }}>A</div>
-                  </div>
-                  <div style={{ position: 'relative', background: '#1a1a1a' }}>
-                    {pickr.image_b && <img src={pickr.image_b} alt="B" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
-                    <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(8,8,8,0.75)', borderRadius: 4, padding: '2px 8px', fontSize: 10, letterSpacing: 2, color: winner === 'B' ? '#C9A84C' : '#fff' }}>B</div>
-                  </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+                  {[
+                    { label: 'A', img: pickr.image_a, pct: pctA, win: winner === 'A' },
+                    { label: 'B', img: pickr.image_b, pct: pctB, win: winner === 'B' },
+                  ].map(item => (
+                    <div key={item.label} style={{ position: 'relative', height: 160, background: '#1a1a1a' }}>
+                      {item.img && <img src={item.img} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)' }} />
+                      <div style={{ position: 'absolute', top: 8, left: item.label === 'A' ? 8 : 'auto', right: item.label === 'B' ? 8 : 'auto', background: 'rgba(8,8,8,0.75)', borderRadius: 4, padding: '2px 8px', fontSize: 10, letterSpacing: 2, color: item.win ? '#C9A84C' : '#fff', fontWeight: item.win ? 600 : 400 }}>{item.label}</div>
+                      <div style={{ position: 'absolute', bottom: 8, left: 0, right: 0, textAlign: 'center' }}>
+                        <span style={{ fontSize: item.win ? 22 : 18, fontWeight: 700, color: item.win ? '#C9A84C' : '#fff', fontFamily: 'Bebas Neue, sans-serif', letterSpacing: 2 }}>{item.pct}%</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+                <div style={{ padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: 9, letterSpacing: 3, color: '#C9A84C', textTransform: 'uppercase' }}>{pickr.category}</span>
                     <span style={{ fontSize: 10, color: '#fff', letterSpacing: 1 }}>{total} vote{total !== 1 ? 's' : ''}</span>
                   </div>
-                  {[{ label: 'A', pct: pctA, win: winner === 'A' }, { label: 'B', pct: pctB, win: winner === 'B' }].map(item => (
-                    <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <span style={{ fontSize: 10, letterSpacing: 2, color: item.win ? '#C9A84C' : '#fff', minWidth: 16, fontWeight: item.win ? 600 : 400 }}>{item.label}</span>
-                      <div style={{ flex: 1, height: 3, background: '#2a2a2a', borderRadius: 2, overflow: 'hidden' }}>
-                        <div style={{ height: '100%', background: item.win ? '#C9A84C' : '#444', borderRadius: 2, width: item.pct + '%', transition: 'width 0.5s ease' }} />
-                      </div>
-                      <span style={{ fontSize: 10, color: item.win ? '#C9A84C' : '#fff', minWidth: 32, textAlign: 'right' }}>{item.pct}%</span>
-                      {item.win && <span style={{ fontSize: 10, color: '#C9A84C' }}>v</span>}
-                    </div>
-                  ))}
+                  <div style={{ height: 3, background: '#1a1a1a', borderRadius: 2, overflow: 'hidden', display: 'flex' }}>
+                    <div style={{ height: '100%', background: '#C9A84C', width: pctA + '%', transition: 'width 0.5s ease', borderRadius: '2px 0 0 2px' }} />
+                    <div style={{ height: '100%', background: '#2a2a2a', flex: 1, borderRadius: '0 2px 2px 0' }} />
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: 9, color: winner === 'A' ? '#C9A84C' : '#888', letterSpacing: 1 }}>A · {pickr.votes_a || 0} votes</span>
+                    <span style={{ fontSize: 9, color: winner === 'B' ? '#C9A84C' : '#888', letterSpacing: 1 }}>B · {pickr.votes_b || 0} votes</span>
+                  </div>
                 </div>
+
               </div>
             )
           })
