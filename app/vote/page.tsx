@@ -100,7 +100,7 @@ export default function VotePage() {
                 </div>
               </div>
 
-              <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(8,8,8,0.75)', border: '0.5px solid rgba(255,255,255,0.15)', borderRadius: 4, padding: '3px 9px', fontSize: 10, letterSpacing: 3, color: '#fff', textTransform: 'uppercase' as const, pointerEvents: 'none' }}>A</div>
+              <div style={{ position: 'absolute', top: 12, left: 12, background: 'rgba(8,8,8,0.75)', border : '0.5px solid rgba(255,255,255,0.15)', borderRadius: 4, padding: '3px 9px', fontSize: 10, letterSpacing: 3, color: '#fff', textTransform: 'uppercase' as const, pointerEvents: 'none' }}>A</div>
               <div style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(8,8,8,0.75)', border: '0.5px solid rgba(255,255,255,0.15)', borderRadius: 4, padding: '3px 9px', fontSize: 10, letterSpacing: 3, color: '#fff', textTransform: 'uppercase' as const, pointerEvents: 'none' }}>B</div>
 
               <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${splitPos}%`, transform: 'translateX(-50%)', width: 2, background: '#C9A84C', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
