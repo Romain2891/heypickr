@@ -37,7 +37,7 @@ export default function VotePage() {
     setTimeout(() => { setVoted(false); setVotedChoice(''); setSplitPos(50); setCurrent(prev => (prev + 1) % pickrs.length) }, 1200)
   }
 
-  function handlePointerMove(e) {
+  function handlePointerMove(e: any) {
     if (!isDragging || !containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
     const x = e.touches ? e.touches[0].clientX : e.clientX
