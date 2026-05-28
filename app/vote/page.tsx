@@ -26,7 +26,7 @@ export default function VotePage() {
     setSplitPos(50)
   }
 
-  async function handleVote(choice) {
+  async function handleVote(choice: 'A' | 'B') {
     if (voted || pickrs.length === 0) return
     const pickr = pickrs[current]
     const field = choice === 'A' ? 'votes_a' : 'votes_b'
