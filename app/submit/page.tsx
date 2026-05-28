@@ -6,17 +6,44 @@ const CATEGORIES = ['Mode', 'Coiffure', 'Make-up', 'Voyage', 'Profil']
 
 export default function SubmitPage() {
   const [category, setCategory] = useState('Mode')
+  const [photoA, setPhotoA] = useState<File | null>(null)
+  const [photoB, setPhotoB] = useState<File | null>(null)
+  const [previewA, setPreviewA] = useState<string | null>(null)
+  const [previewB, setPreviewB] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
+  function handleFile(file: File, slot: 'A' | 'B') {
+    const url = URL.createObjectURL(file)
+    if (slot === 'A') { setPhotoA(file); setPreviewA(url) }
+    else { setPhotoB(file); setPreviewB(url) }
+  }
+
+  async function uploadPhoto(file: File, name: string) {
+    const { data, error } = await supabase.storage.from('pickrs').upload(name, file, { upsert: true })
+    if (error) throw error
+    const { data: urlData } = supabase.storage.from('pickrs').getPublicUrl(name)
+    return urlData.publicUrl
+  }
+
   async function handleSubmit() {
+    if (!photoA || !photoB) return
     setLoading(true)
-    const { error } = await supabase.from('pickrs').insert({
-      category: category.toLowerCase(),
-      user_id: '00000000-0000-0000-0000-000000000000'
-    })
+    try {
+      const timestamp = Date.now()
+      const urlA = await uploadPhoto(photoA, `${timestamp}_a.jpg`)
+      const urlB = await uploadPhoto(photoB, `${timestamp}_b.jpg`)
+      await supabase.from('pickrs').insert({
+        category: category.toLowerCase(),
+        image_a: urlA,
+        image_b: urlB,
+        user_id: '00000000-0000-0000-0000-000000000000'
+      })
+      setSuccess(true)
+    } catch (e) {
+      console.error(e)
+    }
     setLoading(false)
-    if (!error) setSuccess(true)
   }
 
   if (success) return (
@@ -47,11 +74,18 @@ export default function SubmitPage() {
       <div style={{ flex: 1, padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          {['A', 'B'].map(label => (
-            <div key={label} style={{ aspectRatio: '1', background: '#111', border: '0.5px solid #2a2a2a', borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" /></svg>
-              <span style={{ fontSize: 10, letterSpacing: 3, color: '#333', textTransform: 'uppercase' }}>photo {label}</span>
-            </div>
+          {(['A', 'B'] as const).map(label => (
+            <label key={label} style={{ aspectRatio: '1', background: '#111', border: '0.5px solid #2a2a2a', borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', overflow: 'hidden', position: 'relative' }}>
+              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleFile(e.target.files[0], label)} />
+              {(label === 'A' ? previewA : previewB) ? (
+                <img src={label === 'A' ? previewA! : previewB!} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
+              ) : (
+                <>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" /></svg>
+                  <span style={{ fontSize: 10, letterSpacing: 3, color: '#333', textTransform: 'uppercase' }}>photo {label}</span>
+                </>
+              )}
+            </label>
           ))}
         </div>
 
@@ -71,13 +105,10 @@ export default function SubmitPage() {
           <span style={{ fontSize: 11, color: '#C9A84C', letterSpacing: 1 }}>1 crédit</span>
         </div>
 
-        <button onClick={handleSubmit} disabled={loading} style={{ background: loading ? '#1a1a1a' : '#C9A84C', color: loading ? '#444' : '#080808', border: 'none', borderRadius: 20, padding: '14px', fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}>
-          {loading ? 'Envoi...' : 'Soumettre →'}
+        <button onClick={handleSubmit} disabled={loading || !photoA || !photoB} style={{ background: loading || !photoA || !photoB ? '#1a1a1a' : '#C9A84C', color: loading || !photoA || !photoB ? '#444' : '#080808', border: 'none', borderRadius: 20, padding: '14px', fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', fontWeight: 600, cursor: loading || !photoA || !photoB ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}>
+          {loading ? 'Envoi...' : !photoA || !photoB ? 'Ajoute 2 photos' : 'Soumettre →'}
         </button>
 
-        <p style={{ textAlign: 'center', fontSize: 10, color: '#2a2a2a', letterSpacing: 1 }}>
-          Tu as 3 crédits gratuits au départ
-        </p>
       </div>
 
       <div style={{ borderTop: '0.5px solid #1a1a1a', display: 'flex', justifyContent: 'space-around', padding: '7px 0 4px', flexShrink: 0, background: '#080808' }}>
