@@ -157,5 +157,4 @@ export default function VotePage() {
 
     </main>
   )
-}e x p o r t   c o n s t   d y n a m i c   =   ' f o r c e - d y n a m i c '  
- 
+}
